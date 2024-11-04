@@ -1,0 +1,12 @@
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/BadgeAppApplication.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/ServletInitializer.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/configuration/AppConfig.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/configuration/WebConfig.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/controller/HomeController.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/entity/User.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/model/Badge.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/repository/UserRepository.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/service/PdfService.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/service/PhotoService.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/service/RemotePhotoService.java
+/home/ionisoa/Téléchargements/badge_app/src/main/java/com/example/badge_app/service/UserService.java

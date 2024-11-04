@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affichage Badge</title>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .badge-container {
+            background-color: white;
+            border: 2px solid #343a40; /* Bordure sombre */
+            border-radius: 15px; /* Légère courbe pour un effet plus doux */
+            padding: 25px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Ombre plus forte */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .badge-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Ombre plus intense au survol */
+        }
+
+        .badge-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .badge-header h2 {
+            color: #343a40; /* Couleur sombre pour le titre */
+            font-size: 1.75rem;
+            border-bottom: 2px solid #007bff; /* Ligne de séparation sous le titre */
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .badge-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+
+        .user-info {
+            flex-grow: 1;
+            font-size: 1rem;
+            color: #495057; /* Texte légèrement plus foncé */
+        }
+
+        .user-info p {
+            margin: 8px 0;
+        }
+
+        .user-image img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #007bff; /* Bordure plus épaisse autour de l'image */
+        }
+
+        .signature-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .signature {
+            flex-grow: 1;
+        }
+
+        .signature-box {
+            width: 160px;
+            height: 55px;
+            border: 2px dashed #6c757d; /* Bordure plus sombre et plus épaisse */
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+
+        .signature-box img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        button {
+            background-color: #343a40; /* Bouton sombre */
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 5px 15px rgba(0, 91, 187, 0.4); /* Effet de survol avec ombre */
+        }
+
+        /* Adaptabilité pour les petits écrans */
+        @media (max-width: 500px) {
+            .badge-container {
+                padding: 15px;
+            }
+
+            .user-image img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .signature-box {
+                width: 130px;
+                height: 45px;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="badge-container">
+        <div class="badge-header">
+            <h2>Badge Utilisateur</h2>
+        </div>
+        <div class="badge-content">
+            <div class="user-info">
+                <p><strong>Nom :</strong> <span th:text="${badge.getNom()}"></span></p>
+                <p><strong>Prénom :</strong> <span th:text="${badge.getPrenom()}"></span></p>
+                <p><strong>Numéro Matricule :</strong> <span th:text="${badge.getNumeroMatricule()}" id="matricule"></span></p>
+            </div>
+            <div class="user-image">
+                <img th:src="@{${badge.getPathPhoto()}}" alt="Photo de l'utilisateur">
+            </div>
+        </div>
+        <div class="signature-container">
+            <div class="signature">
+                <p><strong>Signature :</strong></p>
+                <div class="signature-box">
+                    <img th:src="@{${badge.getPathSignature()}}" alt="Signature">
+                </div>
+            </div>
+        </div>
+        <button id="generatePdfButton">Valider la création du badge</button>
+    </div>
+    
+    <script>
+        document.getElementById("generatePdfButton").addEventListener("click", function() {
+            const badgeContainer = document.querySelector('.badge-container');
+            const clone = badgeContainer.cloneNode(true);
+            const elementAExclure = clone.querySelector("#generatePdfButton");
+            if (elementAExclure) {
+                elementAExclure.parentNode.removeChild(elementAExclure);
+            }
+            const htmlContent = clone.innerHTML;
+            
+            const styles = `
+                <style>
+                    body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
+                    .badge-container { background-color: white; padding: 20px; border-radius: 10px; }
+                </style>
+            `;
+            
+            const fullHtmlContent = styles + htmlContent;
+            const matricule = document.getElementById("matricule").innerText;
+            
+            fetch(`/toPdf?htmlContent=${encodeURIComponent(fullHtmlContent)}&matricule=${matricule}`)
+                .then(response => response.ok ? response.text() : Promise.reject('Erreur réseau'))
+                .then(data => alert(data))
+                .catch(error => alert('Erreur: ' + error));
+        });
+    </script>
+</body>
+</html>
